@@ -1,3 +1,8 @@
 To determine the country, city and provider, the geodatabases from maxmind are required.
 you need to register to download the databases.
 
+save the country db as: country.mmdb
+save the city db as: city.mmdb
+save the ISP asn DB as: isp.mmdb
+
+without the databases you will get a "NO GEO INFO" Output
