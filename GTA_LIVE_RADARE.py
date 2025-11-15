@@ -4,7 +4,7 @@ import threading,time,os,keyboard
 from datetime import datetime
 from scapy.all import *
 
-MY_IP=''
+MY_IP='0.0.0.0' # <- 'YOUR LOCAL IP LIKE 192.168.2.***
 SNSRV='185.56.65.'
 
 REFRESH_INTERVAL=.3
@@ -16,6 +16,8 @@ def press_keyboard():
 	global REFRESH_ACTIVE
 	while True:
 		key=keyboard.read_key()
+		if key == 'd':
+			inactive_ips.clear()
 		if key == 'p':
 			REFRESH_ACTIVE=not REFRESH_ACTIVE
 			time.sleep(.3)
@@ -32,7 +34,8 @@ def display_loop():
 			inactive_ips[ip]={"last_active": info["last"],"packets_total":info["count"],"moved_at":now}
 		if REFRESH_ACTIVE:
 			os.system('cls')
-			print(Fore.WHITE+"\n===== ACTIVE IPs ===== PRESS p to stop/start refresh")
+			print(Fore.WHITE+f"\n===== ACTIVE IPs ===== ::: timestamp= {dtf}")
+			print('PRESS p to stop/start refresh ::: PRESS d to clear IDLE List')
 			if active_ips:
 				sorted_list=sorted(active_ips.items(),key=lambda x: x[1]["count"],reverse=True)
 				for ip,info in sorted_list:
