@@ -8,7 +8,7 @@ MY_IP=''
 SNSRV='185.56.65.'
 
 REFRESH_INTERVAL=.3
-PKT_TIMEOUT=8
+PKT_TIMEOUT=10
 
 active_ips={}
 REFRESH_ACTIVE=True
@@ -24,10 +24,11 @@ inactive_ips={}
 def display_loop():
 	global REFRESH_ACTIVE
 	while True:
+		dtf=datetime.now().strftime('%H:%M:%S')
 		now=datetime.now()
-		to_inactivate=[ip for ip,info in active_ips.items() if (now-info["last"]).total_seconds() > PKT_TIMEOUT]
+		to_inactivate=[(ip,dtf) for ip,info in active_ips.items() if (now-info["last"]).total_seconds() > PKT_TIMEOUT]
 		for ip in to_inactivate:
-			info=active_ips.pop(ip)
+			info=active_ips.pop(ip[0])
 			inactive_ips[ip]={"last_active": info["last"],"packets_total":info["count"],"moved_at":now}
 		if REFRESH_ACTIVE:
 			os.system('cls')
@@ -43,8 +44,7 @@ def display_loop():
 			if inactive_ips:
 				sorted_idle=sorted(inactive_ips.items(),key=lambda x: x[1]["moved_at"],reverse=True)
 				for ip,info in sorted_idle:
-					dt=(now-info["last_active"]).total_seconds()
-					print(Fore.RED+f"IDLE:: {ip[0]} : {ip[1]}  --> total_pkts={info['packets_total']} timestamp:: ",datetime.now().strftime('%H:%M:%S'))
+					print(Fore.RED+f"IP_ADDR:: {ip[0][0]} : {ip[0][1]}  --> total_pkts={info['packets_total']}:: timestamp= {ip[1]}")
 			else:
 				print(Fore.WHITE+"(none)")
 		time.sleep(REFRESH_INTERVAL)
