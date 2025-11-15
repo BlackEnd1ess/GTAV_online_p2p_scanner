@@ -50,8 +50,7 @@ def display_loop():
 			if inactive_ips:
 				sorted_idle=sorted(inactive_ips.items(),key=lambda x: x[1]["moved_at"],reverse=True)
 				for ip,info in sorted_idle:
-					tb=f'\t' if len(ip[0][0]) > 9 else f'\t \t'
-					print(Fore.RED+f"[IDLE] IP={ip[0][0]} {tb} port={ip[0][1]} \t total_pkts={info['packets_total']} :: timestamp= {ip[1]}")
+					print(Fore.RED+f"[IDLE] IP={ip[0][0]} :: port={ip[0][1]} :: total_pkts={info['packets_total']} :: timestamp= {ip[1]}")
 			else:
 				print(Fore.WHITE+"(none)")
 		time.sleep(REFRESH_INTERVAL)
