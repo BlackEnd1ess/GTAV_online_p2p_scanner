@@ -15,3 +15,11 @@ pip install geoip2
 -----------------------------------------------------------------------
 
 Make sure the db folder is in the same directory as the script.
+
+UPDATE!! GTA_LIVE_RADARE.py will display active and inactive IP-Addresses by counting Data Packets.
+required python modules: 
+- keyboard
+- threading
+- timedelta
+
+install: pip install keyboard
