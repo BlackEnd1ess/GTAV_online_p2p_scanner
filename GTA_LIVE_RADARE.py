@@ -4,10 +4,10 @@ import threading,time,os,keyboard
 from datetime import datetime
 from scapy.all import *
 
-MY_IP='0.0.0.0' # <- 'YOUR LOCAL IP LIKE 192.168.2.***
+MY_IP='0.0.0.0'# <-- YOU LOCAL IP LIKE 192.168.2.***
 SNSRV='185.56.65.'
 
-REFRESH_INTERVAL=.3
+REFRESH_INTERVAL=.5
 PKT_TIMEOUT=10
 
 active_ips={}
@@ -36,22 +36,25 @@ def display_loop():
 			os.system('cls')
 			print(Fore.WHITE+f"\n===== ACTIVE IPs ===== ::: timestamp= {dtf}")
 			print('PRESS p to stop/start refresh ::: PRESS d to clear IDLE List')
+			print(' ')
+			print(f' ======= IP \t \t \t PORT \t \t PKT_COUNT ======')
 			if active_ips:
 				sorted_list=sorted(active_ips.items(),key=lambda x: x[1]["count"],reverse=True)
 				for ip,info in sorted_list:
-					dt=(datetime.now()-info["last"]).total_seconds()
-					print(Fore.GREEN+f"IP_ADDR:: {ip[0]} : {ip[1]}  --> pkts={info['count']} :: last={dt:4.1f}s ago"+Fore.WHITE)
+					ta=f'\t' if len(ip[0]) > 10 else f'\t \t'
+					print(Fore.GREEN+f"[ACTIVE] IP={ip[0]} {ta} port={ip[1]} \t pkts={info['count']} ")# :: last={dt:4.1f}s ago"+Fore.WHITE)
 			else:
 				print("(none)")
 			print(Fore.WHITE+"\n===== IDLE IPs =====")
+			print(f' ======= IP \t \t \t PORT \t \t PKT_COUNT ======')
 			if inactive_ips:
 				sorted_idle=sorted(inactive_ips.items(),key=lambda x: x[1]["moved_at"],reverse=True)
 				for ip,info in sorted_idle:
-					print(Fore.RED+f"IP_ADDR:: {ip[0][0]} : {ip[0][1]}  --> total_pkts={info['packets_total']}:: timestamp= {ip[1]}")
+					tb=f'\t' if len(ip[0][0]) > 9 else f'\t \t'
+					print(Fore.RED+f"[IDLE] IP={ip[0][0]} {tb} port={ip[0][1]} \t total_pkts={info['packets_total']} :: timestamp= {ip[1]}")
 			else:
 				print(Fore.WHITE+"(none)")
 		time.sleep(REFRESH_INTERVAL)
-
 
 def handle(p):
 	if p.haslayer(IP) and p.haslayer(UDP):
