@@ -58,7 +58,13 @@ def insert_ip(atv):
 		pk.flush()
 
 def check_private_ip(atv):
-	return any(prf in atv for prf in ('192.168.','10.','172.'))
+	if '172.' in atv[:4]:
+		return True
+	if '10.' in atv[:3]:
+		return True
+	if '192.168.' in atv[:8]:
+		return True
+	return False
 
 def output_address(atv,S,D):
 	dtf=datetime.now().strftime('%H:%M:%S')
@@ -94,4 +100,5 @@ def sni(p):
 sniff(prn=sni,store=0)
 
 print('done.')
+
 input(' ')
