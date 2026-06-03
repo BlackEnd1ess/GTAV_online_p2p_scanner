@@ -5,7 +5,7 @@ import os,keyboard,time,threading
 
 init(autoreset=True)
 
-MY_IP="192.168.2.218"
+MY_IP=""
 SUN_PREFIX="185.56.65."
 GAME_PORT=6672
 
